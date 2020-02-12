@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         val filePath = getDemoFile()
         val outputFile = File(this.cacheDir, "output.mp4")
 
+        FgJNIAVUtils.printCodecs()
+
         btnStartTranscode.setOnClickListener {
             sample_text.text = FgAVUtils.getFileInfo(filePath)
 

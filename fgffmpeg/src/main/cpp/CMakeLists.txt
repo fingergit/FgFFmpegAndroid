@@ -32,7 +32,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        jni/FgAVUtils.cpp jni/FgJniUtils.h jni/FgJniUtils.cpp FgFFmpeg/FgAVUtils.cpp
+        jni/FgAVUtils.cpp jni/FgJniUtils.h jni/FgJniUtils.cpp FgFFmpeg/CFgAVUtils.cpp
         ffmpeg/fftools/ffmpeg.c ffmpeg/fftools/ffmpeg_filter.c ffmpeg/fftools/ffmpeg_hw.c
         ffmpeg/fftools/ffmpeg_opt.c
         ffmpeg/fftools/cmdutils.c

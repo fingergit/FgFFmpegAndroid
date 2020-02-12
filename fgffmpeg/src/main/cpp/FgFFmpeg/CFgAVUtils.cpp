@@ -10,7 +10,7 @@ extern "C"{
 #include <sstream>
 #include <FgJniUtils.h>
 
-#include "FgAVUtils.h"
+#include "CFgAVUtils.h"
 
 
 double _get_rotation(AVStream *st)
@@ -33,7 +33,7 @@ double _get_rotation(AVStream *st)
 }
 
 
-std::string FgAVUtils::getFileInfo(std::string filePath) {
+std::string CFgAVUtils::getFileInfo(std::string filePath) {
     const char* path= filePath.c_str();
     AVFormatContext* ctx = nullptr;
 
@@ -81,7 +81,14 @@ std::string FgAVUtils::getFileInfo(std::string filePath) {
 
     avformat_close_input(&ctx);
     std::ostringstream buffer;
-    buffer << "{\"rotation\":"<<rotation<<",\"width\":"<<width<<",\"height\":"<<height<<",\"duration\":"<<duration<<",\"bitrate\":"<< bitrate<<",\"fps\":"<<fps<<R"(,"videoCodec":")"<<vCodecName<<"\"}";
+    buffer << "{\"rotation\":" << rotation
+        << ",\"width\":" << width
+        << ",\"height\":" << height
+        << ",\"duration\":" << duration
+        << ",\"bitrate\":" << bitrate
+        << ",\"fps\":" << fps
+        << ",\"videoCodec\":" << vCodecName
+        << "\"}";
     std::string result = buffer.str();
 
     return result;
@@ -109,6 +116,28 @@ void OnFFmpegLog(void* ptr, int level, const char* fmt, va_list vl) {
         LOGD("%s", line);
 }
 
-int FgAVUtils::ffmpegMain(int argc, char **argv, FFmpegProgressCB cbProgress, int64_t taskId) {
+int CFgAVUtils::ffmpegMain(int argc, char **argv, FFmpegProgressCB cbProgress, int64_t taskId) {
     return ffmpeg_main(argc, argv, OnFFmpegLog, cbProgress, taskId);
+}
+
+void CFgAVUtils::printCodecs() {
+    const AVCodecDescriptor *desc = NULL;
+    const AVCodecDescriptor **codecs;
+    unsigned nb_codecs = 0, i = 0;
+
+    while ((desc = avcodec_descriptor_next(desc))) {
+        nb_codecs++;
+        bool isDecoder = (avcodec_find_decoder(desc->id) != NULL);
+        bool isEncoder = (avcodec_find_encoder(desc->id) != NULL);
+        if (isDecoder && isEncoder) {
+            LOGI("[E/D]: %s\n", desc->name);
+        }
+        else if (isEncoder) {
+            LOGI("[E]: %s\n", desc->name);
+        }
+        else {
+//            LOGI("[D]: %s\n", desc->name);
+        }
+    }
+
 }

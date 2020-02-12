@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <string>
 #include "FgJniUtils.h"
-#include "FgAVUtils.h"
+#include "CFgAVUtils.h"
 
 extern "C"{
 #include <libavcodec/jni.h>
@@ -10,7 +10,7 @@ extern "C"{
 
 extern "C" JNIEXPORT jstring JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_getFileInfo
         (JNIEnv *env, jclass, jstring filePath) {
-    std::string fileInfo = FgAVUtils::getFileInfo(FgJniUtils::JStr2Str(env, filePath));
+    std::string fileInfo = CFgAVUtils::getFileInfo(FgJniUtils::JStr2Str(env, filePath));
     return FgJniUtils::Str2JStr(env, fileInfo);
 }
 
@@ -46,7 +46,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_ffmpegMa
     g_env = env;
     g_callback = callback;
     g_javaCallbackId = javaCallbackId;
-    int retCode = FgAVUtils::ffmpegMain(argc, argCmd, OnFFmpegProgress, taskId);
+    int retCode = CFgAVUtils::ffmpegMain(argc, argCmd, OnFFmpegProgress, taskId);
     LOGD("ffmpeg-invoke: retCode=%d",retCode);
 
     for (int i = 0; i < argc; ++i) {
@@ -54,4 +54,9 @@ extern "C" JNIEXPORT jint JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_ffmpegMa
     }
 
     return retCode;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_printCodecs
+        (JNIEnv *, jclass) {
+    CFgAVUtils::printCodecs();
 }

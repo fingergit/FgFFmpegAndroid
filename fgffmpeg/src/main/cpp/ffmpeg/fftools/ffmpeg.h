@@ -24,7 +24,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <signal.h>
-#include <FgFFmpegDef.h>
+#include "FgFFmpegDef.h"
 
 #include "cmdutils.h"
 

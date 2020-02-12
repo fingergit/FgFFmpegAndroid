@@ -505,6 +505,7 @@ static int opt_init_hw_device(void *optctx, const char *opt, const char *arg)
             printf("%s\n", av_hwdevice_get_type_name(type));
         printf("\n");
         ffmpeg_exit_program(0);
+        return 0;
     } else {
         return hw_device_init_from_string(arg, NULL);
     }

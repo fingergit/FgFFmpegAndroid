@@ -16,6 +16,7 @@ public class FgJNIAVUtils {
 
     public native static String getFileInfo(String filePath);
     public native static int ffmpegMain(long taskId, String[] argv, FgFFmpegProgressCallback callback);
+    public native static void printCodecs();
 
     public interface FgFFmpegProgressCallback {
         public void OnProgress(long taskId, int status, long frames, long totalFrames);
