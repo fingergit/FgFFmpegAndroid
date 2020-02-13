@@ -18,7 +18,12 @@ object FgAVUtils {
         argv: Array<String>,
         callback: FgJNIAVUtils.FgFFmpegProgressCallback
     ): Int {
-        return FgJNIAVUtils.ffmpegMain(taskId, argv, callback)
+        try {
+            return FgJNIAVUtils.ffmpegMain(taskId, argv, callback)
+        }catch (e: Throwable) {
+            e.printStackTrace()
+        }
+        return -1
     }
 
     fun copyFile(taskId: Long, srcFilePath: String, trgFilePath: String,

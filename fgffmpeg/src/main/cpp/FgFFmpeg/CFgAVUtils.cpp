@@ -43,11 +43,11 @@ std::string CFgAVUtils::getFileInfo(std::string filePath) {
     avcodec_register_all();
 
     int ret = avformat_open_input(&ctx, path, nullptr, nullptr);
-    avformat_find_stream_info(ctx, nullptr);
     if (ret != 0) {
         printf("avformat_open_input() open failed! path:%s, err:%s", path, av_err2str(ret));
-        return nullptr;
+        return "";
     }
+    avformat_find_stream_info(ctx, nullptr);
     int nStreams = ctx->nb_streams;
 
     AVStream **pStream = ctx->streams;

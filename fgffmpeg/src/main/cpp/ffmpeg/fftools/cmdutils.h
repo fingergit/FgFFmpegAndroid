@@ -34,6 +34,17 @@
 #undef main /* We don't want SDL to override our main() */
 #endif
 
+// AS by lvaj 2020-02-13 for exit_program macro
+#define EXIT_PROGRAM(exit_code) {exit_program(exit_code); return;}
+#define EXIT_PROGRAM_0(exit_code) {exit_program(exit_code); return 0;}
+#define EXIT_PROGRAM_NULL(exit_code) {exit_program(exit_code); return NULL;}
+#define EXIT_PROGRAM_1(exit_code) {exit_program(exit_code); return 1;}
+#define EXIT_PROGRAM_N1(exit_code) {exit_program(exit_code); return -1;}
+#define EXIT_PROGRAM_RET(exit_code, ret_code) {exit_program(exit_code); return ret_code;}
+#define CHECK_NULL_N1(ptr) {if ((ptr) == NULL) { return -1; }}
+#define CHECK_NULL_NULL(ptr) {if ((ptr) == NULL) { return NULL; }}
+// AE by lvaj 2020-02-13 for exit_program macro
+
 /**
  * program name, defined by the program for show_version().
  */
@@ -59,7 +70,10 @@ void register_exit(void (*cb)(int ret));
 /**
  * Wraps exit with a program-specific cleanup routine.
  */
-void exit_program(int ret) av_noreturn;
+ // MS by lvaj 2020-02-13 for exit_program
+// void exit_program(int ret) av_noreturn;
+void exit_program(int ret);
+ // ME by lvaj 2020-02-13 for exit_program
 
 /**
  * Initialize dynamic library loading

@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         override fun OnError(taskId: Long, error: Int) {
-                            throw java.lang.Exception("" + error)
+                            Log.e("MainActivity", "" + error)
                         }
                     }
                     )
