@@ -26,19 +26,31 @@ class MainActivity : AppCompatActivity() {
             doAsync {
                 val ret = FgAVUtils.ffmpegMain(1,
                     arrayOf("ffmpeg", "-i", filePath, "-y",
-                    "-c:v", "libx264", "-c:a", "aac", "-strict",
+                    "-c:v", "libx2643", "-c:a", "aac", "-strict",
                     "experimental", "-b:a", "192k", "-shortest",
                     outputFile.absolutePath
                     ),
-                    FgJNIAVUtils.FgFFmpegProgressCallback { taskId, status, frames, totalFrames ->
-                        Log.i("MainActivity", String.format("taskId: %d, status: %d, frames: %d, totalFrames: %d",
-                            taskId, status, frames, totalFrames))
-                        runOnUiThread {
-                            if (totalFrames > 0) {
-                                progressBar.progress = (frames.toDouble() * 100.0 / totalFrames).toInt()
+                    object: FgJNIAVUtils.FgFFmpegProgressCallback {
+                        override fun OnProgress(
+                            taskId: Long,
+                            status: Int,
+                            frames: Long,
+                            totalFrames: Long
+                        ) {
+                            Log.i("MainActivity", String.format("taskId: %d, status: %d, frames: %d, totalFrames: %d",
+                                taskId, status, frames, totalFrames))
+                            runOnUiThread {
+                                if (totalFrames > 0) {
+                                    progressBar.progress = (frames.toDouble() * 100.0 / totalFrames).toInt()
+                                }
                             }
                         }
-                    })
+
+                        override fun OnError(taskId: Long, error: Int) {
+                            throw java.lang.Exception("" + error)
+                        }
+                    }
+                    )
             }
         }
 
@@ -47,14 +59,27 @@ class MainActivity : AppCompatActivity() {
 
             doAsync {
                 val ret = FgAVUtils.copyFile(2, filePath, outputFile.absolutePath, 2, 2,
-                    FgJNIAVUtils.FgFFmpegProgressCallback { taskId, status, frames, totalFrames ->
-                        Log.i("MainActivity", String.format("taskId: %d, status: %d, frames: %d, totalFrames: %d",
-                            taskId, status, frames, totalFrames))
-                        runOnUiThread {
-                            if (totalFrames > 0) {
-                                progressBar.progress = (frames.toDouble() * 100.0 / totalFrames).toInt()
-                            }
+                    object: FgJNIAVUtils.FgFFmpegProgressCallback {
+                        override fun OnError(taskId: Long, error: Int) {
+
                         }
+
+                        override fun OnProgress(
+                            taskId: Long,
+                            status: Int,
+                            frames: Long,
+                            totalFrames: Long
+                        ) {
+                            Log.i("MainActivity", String.format("taskId: %d, status: %d, frames: %d, totalFrames: %d",
+                                taskId, status, frames, totalFrames))
+                            runOnUiThread {
+                                if (totalFrames > 0) {
+                                    progressBar.progress = (frames.toDouble() * 100.0 / totalFrames).toInt()
+                                }
+                            }
+
+                        }
+
                     })
             }
         }

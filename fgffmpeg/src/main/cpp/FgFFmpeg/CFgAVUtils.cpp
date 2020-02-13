@@ -8,6 +8,8 @@ extern "C"{
 #include "ffmpeg.h"
 }
 #include <sstream>
+#include <exception>
+#include <stdexcept>
 #include <FgJniUtils.h>
 
 #include "CFgAVUtils.h"
@@ -116,8 +118,8 @@ void OnFFmpegLog(void* ptr, int level, const char* fmt, va_list vl) {
         LOGD("%s", line);
 }
 
-int CFgAVUtils::ffmpegMain(int argc, char **argv, FFmpegProgressCB cbProgress, int64_t taskId) {
-    return ffmpeg_main(argc, argv, OnFFmpegLog, cbProgress, taskId);
+int CFgAVUtils::ffmpegMain(int argc, char **argv, FFmpegErrorCB cbErr, FFmpegProgressCB cbProgress, int64_t taskId) {
+    return ffmpeg_main(argc, argv, OnFFmpegLog, cbErr, cbProgress, taskId);
 }
 
 void CFgAVUtils::printCodecs() {

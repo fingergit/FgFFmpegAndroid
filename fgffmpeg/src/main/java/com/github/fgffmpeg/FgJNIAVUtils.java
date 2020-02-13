@@ -20,5 +20,6 @@ public class FgJNIAVUtils {
 
     public interface FgFFmpegProgressCallback {
         public void OnProgress(long taskId, int status, long frames, long totalFrames);
+        public void OnError(long taskId, int error);
     }
 }

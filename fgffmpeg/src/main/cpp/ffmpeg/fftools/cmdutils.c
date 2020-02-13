@@ -135,10 +135,18 @@ void register_exit(void (*cb)(int ret))
 
 void exit_program(int ret)
 {
+    // MS by lvaj 2020-02-12 for FFmpeg Exception
+//    if (program_exit)
+//        program_exit(ret);
+//
+//    exit(ret);
     if (program_exit)
         program_exit(ret);
+    else {
+        exit(ret);
+    }
 
-    exit(ret);
+    // ME by lvaj 2020-02-12 for FFmpeg Exception
 }
 
 double parse_number_or_die(const char *context, const char *numstr, int type,

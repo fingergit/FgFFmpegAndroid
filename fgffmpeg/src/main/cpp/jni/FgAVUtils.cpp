@@ -17,8 +17,13 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_getFi
 JNIEnv *g_env = NULL;
 jobject g_callback;
 jmethodID g_javaCallbackId;
+jmethodID g_javaOnErrorId;
 static void OnFFmpegProgress(int64_t taskId, int status, int64_t frames, int64_t totalFrames) {
     g_env->CallVoidMethod(g_callback, g_javaCallbackId,taskId,status,frames,totalFrames);
+}
+
+static void OnFFmpegError(int64_t taskId) {
+    g_env->CallVoidMethod(g_callback, g_javaOnErrorId,taskId,taskId);
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_ffmpegMain
@@ -41,12 +46,13 @@ extern "C" JNIEXPORT jint JNICALL Java_com_github_fgffmpeg_FgJNIAVUtils_ffmpegMa
 
     jclass javaClass = env->GetObjectClass(callback);
     jmethodID javaCallbackId = env->GetMethodID(javaClass, "OnProgress", "(JIJJ)V");
+    g_javaOnErrorId = env->GetMethodID(javaClass, "OnError", "(JI)V");
     env->DeleteLocalRef(javaClass);
 
     g_env = env;
     g_callback = callback;
     g_javaCallbackId = javaCallbackId;
-    int retCode = CFgAVUtils::ffmpegMain(argc, argCmd, OnFFmpegProgress, taskId);
+    int retCode = CFgAVUtils::ffmpegMain(argc, argCmd, OnFFmpegError, OnFFmpegProgress, taskId);
     LOGD("ffmpeg-invoke: retCode=%d",retCode);
 
     for (int i = 0; i < argc; ++i) {

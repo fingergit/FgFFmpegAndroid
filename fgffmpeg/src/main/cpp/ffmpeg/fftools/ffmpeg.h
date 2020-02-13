@@ -667,7 +667,6 @@ int hw_device_setup_for_encode(OutputStream *ost);
 int hwaccel_decode_init(AVCodecContext *avctx);
 
 // MS by lvaj 2020-02-11 for Android
-void ffmpeg_exit_program(int ret);
-int ffmpeg_main(int argc, char **argv, FFmpegLogCB cbLog, FFmpegProgressCB cbProgress, int64_t taskId);
+int ffmpeg_main(int argc, char **argv, FFmpegLogCB cbLog, FFmpegErrorCB cbErr, FFmpegProgressCB cbProgress, int64_t taskId);
 // ME by lvaj 2020-02-11 for Android
 #endif /* FFTOOLS_FFMPEG_H */
